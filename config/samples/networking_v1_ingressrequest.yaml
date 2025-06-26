@@ -1,0 +1,9 @@
+apiVersion: networking.my.domain/v1
+kind: IngressRequest
+metadata:
+  labels:
+    app.kubernetes.io/name: homelab-alm
+    app.kubernetes.io/managed-by: kustomize
+  name: ingressrequest-sample
+spec:
+  # TODO(user): Add fields here
