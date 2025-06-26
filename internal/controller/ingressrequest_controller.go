@@ -24,9 +24,9 @@ type IngressRequestReconciler struct {
 	Scheme *runtime.Scheme
 }
 
-// +kubebuilder:rbac:groups=networking.my.domain,resources=ingressrequests,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=networking.my.domain,resources=ingressrequests/status,verbs=get;update;patch
-// +kubebuilder:rbac:groups=networking.my.domain,resources=ingressrequests/finalizers,verbs=update
+// +kubebuilder:rbac:groups=networking.alm.homelab,resources=ingressrequests,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=networking.alm.homelab,resources=ingressrequests/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=networking.alm.homelab,resources=ingressrequests/finalizers,verbs=update
 
 func (r *IngressRequestReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	logger := log.FromContext(ctx)

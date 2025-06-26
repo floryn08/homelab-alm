@@ -1,4 +1,4 @@
-apiVersion: networking.my.domain/v1
+apiVersion: networking.alm.homelab/v1
 kind: IngressRequest
 metadata:
   labels:
