@@ -14,7 +14,7 @@
       "@semantic-release/exec",
       {
         "prepareCmd": "echo ${nextRelease.version} > VERSION",
-        "verifyReleaseCmd": ".github/ci-helpers/update_versions.sh ${nextRelease.version}"
+        "verifyReleaseCmd": ".github/ci-helpers/update-versions.sh ${nextRelease.version}"
       }
     ],
     [
