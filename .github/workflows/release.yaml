@@ -31,7 +31,7 @@ jobs:
             @semantic-release/release-notes-generator @semantic-release/exec
 
       - name: Make version update script executable
-        run: chmod +x .github/ci-helpers/update_versions.sh
+        run: chmod +x .github/ci-helpers/update-versions.sh
 
       - name: Run Semantic Release
         run: npx semantic-release
