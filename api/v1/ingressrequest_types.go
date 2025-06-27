@@ -27,11 +27,19 @@ import (
 type IngressRequestSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
-
+	VaultPath   string `json:"vaultPath"`
 	Subdomain   string `json:"subdomain"`
 	ServiceName string `json:"serviceName"`
-	ServicePort int32  `json:"servicePort"`
+	ServicePort string `json:"servicePort"`
 	DomainKey   string `json:"domainKey"`
+
+	Entrypoints []string `json:"entrypoints,omitempty"`
+
+	TLS *IngressTLSConfig `json:"tls,omitempty"`
+}
+
+type IngressTLSConfig struct {
+	SecretName string `json:"secretName"` // reference to TLS secret
 }
 
 // IngressRequestStatus defines the observed state of IngressRequest.

@@ -1,9 +1,14 @@
 apiVersion: networking.alm.homelab/v1
 kind: IngressRequest
 metadata:
-  labels:
-    app.kubernetes.io/name: homelab-alm
-    app.kubernetes.io/managed-by: kustomize
-  name: ingressrequest-sample
+  name: my-service
 spec:
-  # TODO(user): Add fields here
+  vaultPath: "kv/data/custom-domains"
+  domainKey: stagingDomain
+  subdomain: dashboard
+  serviceName: dashboard-svc
+  servicePort: "http"
+  entrypoints:
+    - websecure
+  tls:
+    secretName: dashboard-tls

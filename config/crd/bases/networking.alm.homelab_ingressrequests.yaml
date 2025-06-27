@@ -41,18 +41,34 @@ spec:
             properties:
               domainKey:
                 type: string
+              entrypoints:
+                items:
+                  type: string
+                type: array
               serviceName:
                 type: string
               servicePort:
-                format: int32
-                type: integer
+                type: string
               subdomain:
+                type: string
+              tls:
+                properties:
+                  secretName:
+                    type: string
+                required:
+                - secretName
+                type: object
+              vaultPath:
+                description: |-
+                  INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
+                  Important: Run "make" to regenerate code after modifying this file
                 type: string
             required:
             - domainKey
             - serviceName
             - servicePort
             - subdomain
+            - vaultPath
             type: object
           status:
             description: IngressRequestStatus defines the observed state of IngressRequest.

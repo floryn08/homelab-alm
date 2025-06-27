@@ -40,8 +40,13 @@ func (r *IngressRequestReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 		return ctrl.Result{}, err
 	}
 
+	vaultPath := ir.Spec.VaultPath
+	if vaultPath == "" {
+		vaultPath = "kv/data/domains" // default
+	}
+
 	// 2. Fetch the domain from Vault using the provided domainKey
-	domain, err := getDomainFromVault(ir.Spec.DomainKey)
+	domain, err := getDomainFromVault(vaultPath, ir.Spec.DomainKey)
 	if err != nil {
 		logger.Error(err, "failed to get domain from Vault")
 		return ctrl.Result{}, err
@@ -50,6 +55,13 @@ func (r *IngressRequestReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 	// 3. Construct the full domain
 	fqdn := fmt.Sprintf("%s.%s", ir.Spec.Subdomain, domain)
 
+	entrypoints := []string{"web"}
+	if len(ir.Spec.Entrypoints) > 0 {
+		entrypoints = ir.Spec.Entrypoints
+	}
+
+	servicePort := intstr.FromString(ir.Spec.ServicePort)
+
 	// 4. Define the desired IngressRoute
 	route := &traefikv1alpha1.IngressRoute{
 		ObjectMeta: metav1.ObjectMeta{
@@ -57,7 +69,7 @@ func (r *IngressRequestReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 			Namespace: ir.Namespace,
 		},
 		Spec: traefikv1alpha1.IngressRouteSpec{
-			EntryPoints: []string{"web"},
+			EntryPoints: entrypoints,
 			Routes: []traefikv1alpha1.Route{
 				{
 					Match: fmt.Sprintf("Host(`%s`)", fqdn),
@@ -66,13 +78,19 @@ func (r *IngressRequestReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 						{
 							LoadBalancerSpec: traefikv1alpha1.LoadBalancerSpec{
 								Name: ir.Spec.ServiceName,
-								Port: intstr.FromInt(int(ir.Spec.ServicePort)),
+								Port: servicePort,
 							},
 						},
 					},
 				},
 			},
 		},
+	}
+
+	if ir.Spec.TLS != nil {
+		route.Spec.TLS = &traefikv1alpha1.TLS{
+			SecretName: ir.Spec.TLS.SecretName,
+		}
 	}
 
 	// 5. Set owner reference for cleanup
@@ -117,16 +135,16 @@ func (r *IngressRequestReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		Complete(r)
 }
 
-func getDomainFromVault(key string) (string, error) {
+func getDomainFromVault(path, key string) (string, error) {
 	config := vault.DefaultConfig()
 	client, err := vault.NewClient(config)
 	if err != nil {
 		return "", err
 	}
 
-	secret, err := client.Logical().Read("kv/data/domains")
+	secret, err := client.Logical().Read(path)
 	if err != nil || secret == nil || secret.Data["data"] == nil {
-		return "", fmt.Errorf("failed to read domains from Vault")
+		return "", fmt.Errorf("failed to read secret from Vault at path %s", path)
 	}
 
 	data := secret.Data["data"].(map[string]interface{})

@@ -41,13 +41,23 @@ spec:
             properties:
               domainKey:
                 type: string
+              entrypoints:
+                items:
+                  type: string
+                type: array
               serviceName:
                 type: string
               servicePort:
-                format: int32
-                type: integer
+                type: string
               subdomain:
                 type: string
+              tls:
+                properties:
+                  secretName:
+                    type: string
+                required:
+                - secretName
+                type: object
             required:
             - domainKey
             - serviceName
