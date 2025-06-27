@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/floryn08/homelab-alm/compare/v1.0.2...v1.0.3) (2025-06-27)
+
+
+### Bug Fixes
+
+* fixed permissions ([ac7cedf](https://github.com/floryn08/homelab-alm/commit/ac7cedfb37dd5af792242d4a4f5cacd64fe112aa))
+
 ## [1.0.2](https://github.com/floryn08/homelab-alm/compare/v1.0.1...v1.0.2) (2025-06-27)
 
 
