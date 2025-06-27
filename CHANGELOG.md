@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/floryn08/homelab-alm/compare/v1.0.4...v1.1.0) (2025-06-27)
+
+
+### Features
+
+* added new fields to crd ([8af2729](https://github.com/floryn08/homelab-alm/commit/8af2729f087f27df1213cf515231be37fd08069d))
+
 ## [1.0.4](https://github.com/floryn08/homelab-alm/compare/v1.0.3...v1.0.4) (2025-06-27)
 
 
