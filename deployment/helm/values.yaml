@@ -1,5 +1,5 @@
-image: homelab-alm:test
-namespace: utility-services
+image: ghcr.io/floryn08/homelab-alm:v1.0.1
+namespace: default
 service:
   type: ClusterIP
 ports:
