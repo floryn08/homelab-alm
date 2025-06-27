@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/floryn08/homelab-alm/compare/v1.0.0...v1.0.1) (2025-06-27)
+
+
+### Bug Fixes
+
+* fix release ([1361d4c](https://github.com/floryn08/homelab-alm/commit/1361d4c584b47b1ecaba3dbccb56db8ea058eb90))
+
 # 1.0.0 (2025-06-26)
 
 
