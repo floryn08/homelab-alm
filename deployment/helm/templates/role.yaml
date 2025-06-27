@@ -1,0 +1,32 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ .Release.Name }}-role
+rules:
+- apiGroups:
+  - networking.alm.homelab
+  resources:
+  - ingressrequests
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - networking.alm.homelab
+  resources:
+  - ingressrequests/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - networking.alm.homelab
+  resources:
+  - ingressrequests/status
+  verbs:
+  - get
+  - patch
+  - update
