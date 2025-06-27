@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  homelab-alm:
+  - apiVersion: v2
+    appVersion: 1.0.1
+    created: "2025-06-27T10:47:14.038388865Z"
+    description: A Helm chart for Kubernetes
+    digest: df8a0009bd0d42f7b694a73ed9df630abee2453e0371369099853803f557701d
+    name: homelab-alm
+    type: application
+    urls:
+    - https://github.com/floryn08/homelab-alm/releases/download/homelab-alm-1.0.1/homelab-alm-1.0.1.tgz
+    version: 1.0.1
+generated: "2025-06-27T10:47:14.038399395Z"
