@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/floryn08/homelab-alm/compare/v1.0.3...v1.0.4) (2025-06-27)
+
+
+### Bug Fixes
+
+* fix role ([4ce391c](https://github.com/floryn08/homelab-alm/commit/4ce391ca51dbb21b2c8fff45dfa2378e393296c0))
+
 ## [1.0.3](https://github.com/floryn08/homelab-alm/compare/v1.0.2...v1.0.3) (2025-06-27)
 
 
