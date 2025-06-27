@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/floryn08/homelab-alm/compare/v1.1.0...v1.1.1) (2025-06-27)
+
+
+### Bug Fixes
+
+* added vault path ([1fbbc82](https://github.com/floryn08/homelab-alm/commit/1fbbc82f072367fa03f11dd5016575e6f41fc7a4))
+
 # [1.1.0](https://github.com/floryn08/homelab-alm/compare/v1.0.4...v1.1.0) (2025-06-27)
 
 
