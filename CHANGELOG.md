@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/floryn08/homelab-alm/compare/v1.1.1...v1.2.0) (2025-07-06)
+
+
+### Features
+
+* added certificate request crd ([6f4b63a](https://github.com/floryn08/homelab-alm/commit/6f4b63a22f46aa060c81e7e807b9ee0599b7fab3))
+
 ## [1.1.1](https://github.com/floryn08/homelab-alm/compare/v1.1.0...v1.1.1) (2025-06-27)
 
 
