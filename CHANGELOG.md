@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/floryn08/homelab-alm/compare/v1.2.0...v1.2.1) (2025-07-06)
+
+
+### Bug Fixes
+
+* fixed docker build ([90e9c90](https://github.com/floryn08/homelab-alm/commit/90e9c90e41960c2db88b3f76d94e55b3c3a1c386))
+
 # [1.2.0](https://github.com/floryn08/homelab-alm/compare/v1.1.1...v1.2.0) (2025-07-06)
 
 
