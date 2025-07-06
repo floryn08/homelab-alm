@@ -37,9 +37,11 @@ import (
 	metricsserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 
+	certmanagerv1 "github.com/cert-manager/cert-manager/pkg/apis/certmanager/v1"
+	traefikv1alpha1 "github.com/traefik/traefik/v3/pkg/provider/kubernetes/crd/traefikio/v1alpha1"
+
 	networkingv1 "github.com/floryn08/homelab-alm/api/v1"
 	"github.com/floryn08/homelab-alm/internal/controller"
-	traefikv1alpha1 "github.com/traefik/traefik/v3/pkg/provider/kubernetes/crd/traefikio/v1alpha1"
 	// +kubebuilder:scaffold:imports
 )
 
@@ -53,6 +55,7 @@ func init() {
 
 	utilruntime.Must(networkingv1.AddToScheme(scheme))
 	utilruntime.Must(traefikv1alpha1.AddToScheme(scheme))
+	utilruntime.Must(certmanagerv1.AddToScheme(scheme))
 
 	// +kubebuilder:scaffold:scheme
 }
@@ -210,6 +213,13 @@ func main() {
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "IngressRequest")
+		os.Exit(1)
+	}
+	if err = (&controller.CertificateRequestReconciler{
+		Client: mgr.GetClient(),
+		Scheme: mgr.GetScheme(),
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "CertificateRequest")
 		os.Exit(1)
 	}
 	// +kubebuilder:scaffold:builder

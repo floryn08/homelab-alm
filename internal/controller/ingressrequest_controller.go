@@ -11,11 +11,11 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	vault "github.com/hashicorp/vault/api"
 	traefikv1alpha1 "github.com/traefik/traefik/v3/pkg/provider/kubernetes/crd/traefikio/v1alpha1"
 	"k8s.io/apimachinery/pkg/runtime"
 
 	networkingv1 "github.com/floryn08/homelab-alm/api/v1"
+	"github.com/floryn08/homelab-alm/internal/utils"
 )
 
 // IngressRequestReconciler reconciles a IngressRequest object
@@ -46,7 +46,7 @@ func (r *IngressRequestReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 	}
 
 	// 2. Fetch the domain from Vault using the provided domainKey
-	domain, err := getDomainFromVault(vaultPath, ir.Spec.DomainKey)
+	domain, err := utils.GetDomainFromVault(vaultPath, ir.Spec.DomainKey)
 	if err != nil {
 		logger.Error(err, "failed to get domain from Vault")
 		return ctrl.Result{}, err
@@ -133,25 +133,4 @@ func (r *IngressRequestReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		For(&networkingv1.IngressRequest{}).
 		Named("ingressrequest").
 		Complete(r)
-}
-
-func getDomainFromVault(path, key string) (string, error) {
-	config := vault.DefaultConfig()
-	client, err := vault.NewClient(config)
-	if err != nil {
-		return "", err
-	}
-
-	secret, err := client.Logical().Read(path)
-	if err != nil || secret == nil || secret.Data["data"] == nil {
-		return "", fmt.Errorf("failed to read secret from Vault at path %s", path)
-	}
-
-	data := secret.Data["data"].(map[string]interface{})
-	val, ok := data[key].(string)
-	if !ok {
-		return "", fmt.Errorf("domain key '%s' not found or invalid", key)
-	}
-
-	return val, nil
 }

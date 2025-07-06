@@ -2,6 +2,7 @@ apiVersion: networking.alm.homelab/v1
 kind: IngressRequest
 metadata:
   name: my-service
+  namespace: my-namespace
 spec:
   vaultPath: "kv/data/custom-domains"
   domainKey: stagingDomain

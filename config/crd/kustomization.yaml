@@ -3,6 +3,7 @@
 # It should be run by config/default
 resources:
 - bases/networking.alm.homelab_ingressrequests.yaml
+- bases/networking.alm.homelab_certificaterequests.yaml
 # +kubebuilder:scaffold:crdkustomizeresource
 
 patches:

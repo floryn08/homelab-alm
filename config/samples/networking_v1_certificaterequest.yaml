@@ -1,0 +1,10 @@
+apiVersion: networking.alm.homelab/v1
+kind: CertificateRequest
+metadata:
+  name: my-name
+  namespace: my-namespace
+spec:
+  domainKey: key
+  secretName: my-secret
+  subdomain: my-subdomain
+  vaultPath: kv/data/my-path

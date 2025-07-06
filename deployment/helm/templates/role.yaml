@@ -7,6 +7,7 @@ rules:
 - apiGroups:
   - networking.alm.homelab
   resources:
+  - certificaterequests
   - ingressrequests
   verbs:
   - create
@@ -19,17 +20,28 @@ rules:
 - apiGroups:
   - networking.alm.homelab
   resources:
+  - certificaterequests/finalizers
   - ingressrequests/finalizers
   verbs:
   - update
 - apiGroups:
   - networking.alm.homelab
   resources:
+  - certificaterequests/status
   - ingressrequests/status
   verbs:
   - get
   - patch
   - update
-- apiGroups: ["traefik.io"]
-  resources: ["ingressroutes"]
-  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: 
+  - traefik.io
+  resources: 
+    - ingressroutes
+  verbs: 
+    - get
+    - list
+    - watch
+    - create
+    - update
+    - patch
+    - delete
