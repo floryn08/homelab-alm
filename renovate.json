@@ -2,5 +2,23 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "packageRules": [
+    {
+      "matchManagers": ["gomod"],
+      "groupName": "go dependencies"
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions workflow updates"
+    },
+    {
+      "matchManagers": ["dockerfile"],
+      "groupName": "Dockerfile updates"
+    },
+    {
+      "matchManagers": ["helmv3"],
+      "groupName": "Helm chart updates"
+    }
   ]
 }
