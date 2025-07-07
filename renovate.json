@@ -3,6 +3,9 @@
   "extends": [
     "config:recommended"
   ],
+  "schedule": ["before 3am every day"],
+  "assignees": ["floryn08"],
+  "reviewers": ["floryn08"],
   "packageRules": [
     {
       "matchManagers": ["gomod"],
