@@ -88,9 +88,17 @@ func (r *IngressRequestReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 	}
 
 	if ir.Spec.TLS != nil {
-		route.Spec.TLS = &traefikv1alpha1.TLS{
-			SecretName: ir.Spec.TLS.SecretName,
+		tlsConfig := &traefikv1alpha1.TLS{}
+
+		if ir.Spec.TLS.SecretName != "" {
+			tlsConfig.SecretName = ir.Spec.TLS.SecretName
 		}
+
+		if ir.Spec.TLS.CertResolver != "" {
+			tlsConfig.CertResolver = ir.Spec.TLS.CertResolver
+		}
+
+		route.Spec.TLS = tlsConfig
 	}
 
 	// 5. Set owner reference for cleanup

@@ -39,7 +39,8 @@ type IngressRequestSpec struct {
 }
 
 type IngressTLSConfig struct {
-	SecretName string `json:"secretName"` // reference to TLS secret
+	SecretName string `json:"secretName,omitempty"` // reference to TLS secret
+	CertResolver string `json:"certResolver,omitempty"` // for dynamic certs (e.g. Let's Encrypt via Traefik)
 }
 
 // IngressRequestStatus defines the observed state of IngressRequest.

@@ -53,10 +53,10 @@ spec:
                 type: string
               tls:
                 properties:
+                  certResolver:
+                    type: string
                   secretName:
                     type: string
-                required:
-                - secretName
                 type: object
               vaultPath:
                 description: |-
