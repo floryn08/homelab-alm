@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/floryn08/homelab-alm/compare/v1.3.0...v1.3.1) (2025-07-14)
+
+
+### Bug Fixes
+
+* fixed lint ([be305ac](https://github.com/floryn08/homelab-alm/commit/be305ac620acdc8242b04b18280262d6facaec02))
+
 # [1.3.0](https://github.com/floryn08/homelab-alm/compare/v1.2.2...v1.3.0) (2025-07-14)
 
 
