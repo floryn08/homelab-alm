@@ -62,6 +62,14 @@ func (r *IngressRequestReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 
 	servicePort := intstr.FromString(ir.Spec.ServicePort)
 
+	middlewares := []traefikv1alpha1.MiddlewareRef{}
+	for _, mw := range ir.Spec.Middlewares {
+		middlewares = append(middlewares, traefikv1alpha1.MiddlewareRef{
+			Name:      mw.Name,
+			Namespace: mw.Namespace,
+		})
+	}
+
 	// 4. Define the desired IngressRoute
 	route := &traefikv1alpha1.IngressRoute{
 		ObjectMeta: metav1.ObjectMeta{
@@ -82,6 +90,7 @@ func (r *IngressRequestReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 							},
 						},
 					},
+					Middlewares: middlewares,
 				},
 			},
 		},

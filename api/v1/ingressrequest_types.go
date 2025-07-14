@@ -36,11 +36,18 @@ type IngressRequestSpec struct {
 	Entrypoints []string `json:"entrypoints,omitempty"`
 
 	TLS *IngressTLSConfig `json:"tls,omitempty"`
+
+	Middlewares []MiddlewareRef `json:"middlewares,omitempty"`
 }
 
 type IngressTLSConfig struct {
 	SecretName   string `json:"secretName,omitempty"`   // reference to TLS secret
 	CertResolver string `json:"certResolver,omitempty"` // for dynamic certs (e.g. Let's Encrypt via Traefik)
+}
+
+type MiddlewareRef struct {
+	Name      string `json:"name"`
+	Namespace string `json:"namespace"`
 }
 
 // IngressRequestStatus defines the observed state of IngressRequest.
