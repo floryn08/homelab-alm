@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/floryn08/homelab-alm/compare/v1.2.2...v1.3.0) (2025-07-14)
+
+
+### Features
+
+* added certResolver to IngressRequest tls ([9f8cb80](https://github.com/floryn08/homelab-alm/commit/9f8cb806a88d3c75ff908b0f821b9693fe394005))
+
 ## [1.2.2](https://github.com/floryn08/homelab-alm/compare/v1.2.1...v1.2.2) (2025-07-06)
 
 
