@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/floryn08/homelab-alm/compare/v1.3.1...v1.4.0) (2025-07-14)
+
+
+### Features
+
+* added middlewares to IngressRequest ([1605eba](https://github.com/floryn08/homelab-alm/commit/1605eba83d0060c5af1b7e4be102df3e45613dfa))
+
 ## [1.3.1](https://github.com/floryn08/homelab-alm/compare/v1.3.0...v1.3.1) (2025-07-14)
 
 
