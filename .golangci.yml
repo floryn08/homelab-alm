@@ -1,4 +1,4 @@
-version: 2
+version: "2"
 
 run:
   timeout: 5m
@@ -68,9 +68,6 @@ formatters:
     - gofmt
     - goimports
   exclusions:
-    rules:
-      - path: zz_generated\.
-        formatters:
-          - gofmt
-          - goimports
+    paths:
+      - zz_generated\.
 
