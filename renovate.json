@@ -9,7 +9,38 @@
   "packageRules": [
     {
       "matchManagers": ["gomod"],
-      "groupName": "go dependencies"
+      "groupName": "go dependencies",
+      "prBodyNotes": [
+        "⚠️ This PR updates Go dependencies. Dependency compatibility tests will run automatically.",
+        "",
+        "Please verify:",
+        "- [ ] Dependency compatibility tests pass",
+        "- [ ] cert-manager API compatibility",
+        "- [ ] Traefik CRD API compatibility",
+        "- [ ] Vault client API compatibility"
+      ]
+    },
+    {
+      "matchManagers": ["gomod"],
+      "matchPackageNames": [
+        "github.com/cert-manager/cert-manager",
+        "github.com/traefik/traefik/v3",
+        "github.com/hashicorp/vault/api"
+      ],
+      "groupName": "critical dependencies",
+      "prBodyNotes": [
+        "🚨 **CRITICAL DEPENDENCY UPDATE**",
+        "",
+        "This PR updates a core dependency (cert-manager, Traefik, or Vault).",
+        "Breaking changes in these dependencies can cause operator failures.",
+        "",
+        "**Required checks before merging:**",
+        "- [ ] All dependency compatibility tests pass",
+        "- [ ] Review changelog for breaking changes",
+        "- [ ] Test in development environment",
+        "- [ ] Update operator code if needed"
+      ],
+      "stabilityDays": 3
     },
     {
       "matchManagers": ["github-actions"],

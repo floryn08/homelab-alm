@@ -25,28 +25,61 @@ import (
 
 // IngressRequestSpec defines the desired state of IngressRequest.
 type IngressRequestSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
-	VaultPath   string `json:"vaultPath"`
-	Subdomain   string `json:"subdomain"`
-	ServiceName string `json:"serviceName"`
-	ServicePort string `json:"servicePort"`
-	DomainKey   string `json:"domainKey"`
+	// Vault path to read domain configuration from
+	// +kubebuilder:default="kv/data/domains"
+	VaultPath string `json:"vaultPath,omitempty"`
 
+	// The subdomain to prepend to the domain
+	// +kubebuilder:validation:Required
+	// +kubebuilder:validation:Pattern=`^[a-z0-9]([-a-z0-9]*[a-z0-9])?$`
+	Subdomain string `json:"subdomain"`
+
+	// The name of the Kubernetes service to route traffic to
+	// +kubebuilder:validation:Required
+	// +kubebuilder:validation:MinLength=1
+	ServiceName string `json:"serviceName"`
+
+	// The port of the service (can be port number or name)
+	// +kubebuilder:validation:Required
+	ServicePort string `json:"servicePort"`
+
+	// The key used to fetch the domain from Vault
+	// +kubebuilder:validation:Required
+	// +kubebuilder:validation:MinLength=1
+	DomainKey string `json:"domainKey"`
+
+	// Traefik entrypoints to use (defaults to ["web"])
+	// +kubebuilder:validation:Optional
 	Entrypoints []string `json:"entrypoints,omitempty"`
 
+	// TLS configuration for the ingress
+	// +kubebuilder:validation:Optional
 	TLS *IngressTLSConfig `json:"tls,omitempty"`
 
+	// Middlewares to apply to the route
+	// +kubebuilder:validation:Optional
 	Middlewares []MiddlewareRef `json:"middlewares,omitempty"`
 }
 
 type IngressTLSConfig struct {
-	SecretName   string `json:"secretName,omitempty"`   // reference to TLS secret
-	CertResolver string `json:"certResolver,omitempty"` // for dynamic certs (e.g. Let's Encrypt via Traefik)
+	// Reference to TLS secret containing the certificate
+	// +kubebuilder:validation:Optional
+	SecretName string `json:"secretName,omitempty"`
+
+	// CertResolver for dynamic certificates (e.g. Let's Encrypt via Traefik)
+	// +kubebuilder:validation:Optional
+	CertResolver string `json:"certResolver,omitempty"`
 }
 
 type MiddlewareRef struct {
-	Name      string `json:"name"`
+	// Name of the Traefik middleware
+	// +kubebuilder:validation:Required
+	// +kubebuilder:validation:MinLength=1
+	Name string `json:"name"`
+
+	// Namespace where the middleware is located
+	// +kubebuilder:validation:Required
+	// +kubebuilder:validation:MinLength=1
 	Namespace string `json:"namespace"`
 }
 

@@ -1,10 +1,23 @@
 apiVersion: networking.alm.homelab/v1
 kind: CertificateRequest
 metadata:
-  name: my-name
-  namespace: my-namespace
+  name: my-app-cert
+  namespace: default
 spec:
-  domainKey: key
-  secretName: my-secret
-  subdomain: my-subdomain
-  vaultPath: kv/data/my-path
+  # Required: Key to fetch domain from Vault
+  domainKey: prodDomain
+  
+  # Required: Name of the secret to store the certificate
+  secretName: my-app-tls
+  
+  # Optional: Subdomain to prepend to the domain
+  subdomain: my-app
+  
+  # Optional: Custom Vault path (defaults to kv/data/domains)
+  vaultPath: kv/data/domains
+  
+  # Optional: Custom issuer name (defaults to ca-issuer)
+  issuerName: ca-issuer
+  
+  # Optional: Issuer kind - Issuer or ClusterIssuer (defaults to ClusterIssuer)
+  issuerKind: ClusterIssuer

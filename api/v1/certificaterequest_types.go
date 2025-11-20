@@ -26,16 +26,36 @@ import (
 // CertificateRequestSpec defines the desired state of CertificateRequest.
 type CertificateRequestSpec struct {
 	// The name of the Kubernetes secret to store the generated certificate
+	// +kubebuilder:validation:Required
+	// +kubebuilder:validation:MinLength=1
+	// +kubebuilder:validation:MaxLength=253
+	// +kubebuilder:validation:Pattern=`^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`
 	SecretName string `json:"secretName"`
 
 	// The key used to fetch the domain from Vault at kv/data/domains
+	// +kubebuilder:validation:Required
+	// +kubebuilder:validation:MinLength=1
 	DomainKey string `json:"domainKey"`
 
 	// The subdomain to prepend to the domain (optional)
+	// +kubebuilder:validation:Optional
+	// +kubebuilder:validation:Pattern=`^[a-z0-9]([-a-z0-9]*[a-z0-9])?$`
 	Subdomain string `json:"subdomain,omitempty"`
 
 	// Vault path (e.g. kv/data/cert-info) to read additional metadata (optional)
+	// +kubebuilder:default="kv/data/domains"
 	VaultPath string `json:"vaultPath,omitempty"`
+
+	// IssuerRef is a reference to the issuer for this certificate.
+	// If not specified, defaults to 'ca-issuer' ClusterIssuer
+	// +kubebuilder:validation:Optional
+	// +kubebuilder:default="ca-issuer"
+	IssuerName string `json:"issuerName,omitempty"`
+
+	// IssuerKind is the kind of the issuer (Issuer or ClusterIssuer)
+	// +kubebuilder:validation:Enum=Issuer;ClusterIssuer
+	// +kubebuilder:default="ClusterIssuer"
+	IssuerKind string `json:"issuerKind,omitempty"`
 }
 
 // CertificateRequestStatus defines the observed state of CertificateRequest.

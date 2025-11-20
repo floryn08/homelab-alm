@@ -1,15 +1,38 @@
 apiVersion: networking.alm.homelab/v1
 kind: IngressRequest
 metadata:
-  name: my-service
-  namespace: my-namespace
+  name: my-app-ingress
+  namespace: default
 spec:
-  vaultPath: "kv/data/custom-domains"
-  domainKey: stagingDomain
-  subdomain: dashboard
-  serviceName: dashboard-svc
+  # Required: Key to fetch domain from Vault
+  domainKey: prodDomain
+  
+  # Required: Subdomain to prepend to the domain
+  subdomain: my-app
+  
+  # Required: Target service name
+  serviceName: my-app-service
+  
+  # Required: Target service port (can be name or number)
   servicePort: "http"
+  
+  # Optional: Custom Vault path (defaults to kv/data/domains)
+  vaultPath: kv/data/domains
+  
+  # Optional: Traefik entrypoints (defaults to ["web"])
   entrypoints:
     - websecure
+  
+  # Optional: TLS configuration
   tls:
-    secretName: dashboard-tls
+    # Reference to TLS secret (typically created by CertificateRequest)
+    secretName: my-app-tls
+    # OR use Traefik's cert resolver for dynamic certificates
+    # certResolver: letsencrypt
+  
+  # Optional: Traefik middlewares to apply
+  middlewares:
+    - name: auth-middleware
+      namespace: middleware-ns
+    - name: rate-limit
+      namespace: middleware-ns

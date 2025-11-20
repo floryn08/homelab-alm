@@ -1,6 +1,7 @@
 run:
   timeout: 5m
   allow-parallel-runners: true
+  go: '1.23'
 
 issues:
   # don't skip warning about doc comments
@@ -16,6 +17,26 @@ issues:
       linters:
         - dupl
         - lll
+    # Exclude generated files
+    - path: zz_generated\.
+      linters:
+        - gofmt
+        - goimports
+        - revive
+        - gocritic
+    # Allow complex main function (entry point)
+    - path: cmd/main\.go
+      linters:
+        - gocyclo
+        - revive
+      text: "cyclomatic|cognitive"
+    # Exclude some linters from running on test files
+    - path: _test\.go
+      linters:
+        - gocyclo
+        - errcheck
+        - gosec
+
 linters:
   disable-all: true
   enable:
@@ -40,8 +61,20 @@ linters:
     - unconvert
     - unparam
     - unused
+    - gosec          # Security checks
+    - bodyclose      # HTTP response body checks
+    - whitespace     # Whitespace detection
+    - nilerr         # Nil error checks
 
 linters-settings:
   revive:
     rules:
       - name: comment-spacings
+  gocyclo:
+    # Allow higher complexity for main and setup functions
+    min-complexity: 20
+  gosec:
+    excludes:
+      # G104: Audit errors not checked - we handle this with errcheck
+      - G104
+

@@ -41,35 +41,85 @@ type CertificateRequestReconciler struct {
 // +kubebuilder:rbac:groups=networking.alm.homelab,resources=certificaterequests,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=networking.alm.homelab,resources=certificaterequests/status,verbs=get;update;patch
 // +kubebuilder:rbac:groups=networking.alm.homelab,resources=certificaterequests/finalizers,verbs=update
+// +kubebuilder:rbac:groups=cert-manager.io,resources=certificates,verbs=get;list;watch;create;update;patch;delete
 
 func (r *CertificateRequestReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	logger := log.FromContext(ctx)
 
-	// 1. Get the CertificateRequest CR
+	// Fetch the CertificateRequest CR
 	var cr networkingv1.CertificateRequest
 	if err := r.Get(ctx, req.NamespacedName, &cr); err != nil {
 		if errors.IsNotFound(err) {
-			return ctrl.Result{}, nil // CR deleted
+			return ctrl.Result{}, nil // CR deleted, nothing to do
 		}
+		logger.Error(err, "failed to get CertificateRequest")
 		return ctrl.Result{}, err
 	}
 
+	// Fetch domain from Vault
+	fqdn, err := r.getFQDN(&cr)
+	if err != nil {
+		logger.Error(err, "failed to construct FQDN")
+		return ctrl.Result{}, err
+	}
+
+	// Create or update the Certificate
+	cert := r.buildCertificate(&cr, fqdn)
+	if err := ctrl.SetControllerReference(&cr, cert, r.Scheme); err != nil {
+		logger.Error(err, "failed to set controller reference")
+		return ctrl.Result{}, err
+	}
+
+	if err := r.createOrUpdateCertificate(ctx, cert); err != nil {
+		logger.Error(err, "failed to create or update Certificate")
+		return ctrl.Result{}, err
+	}
+
+	logger.Info("Successfully reconciled Certificate", "fqdn", fqdn)
+
+	// Update status
+	return r.updateStatus(ctx, &cr, fqdn)
+}
+
+// getFQDN constructs the FQDN by fetching the domain from Vault
+func (r *CertificateRequestReconciler) getFQDN(cr *networkingv1.CertificateRequest) (string, error) {
 	vaultPath := cr.Spec.VaultPath
 	if vaultPath == "" {
-		vaultPath = "kv/data/domains" // default
+		vaultPath = "kv/data/domains"
 	}
 
-	// 2. Get domain from Vault
 	domain, err := utils.GetDomainFromVault(vaultPath, cr.Spec.DomainKey)
 	if err != nil {
-		logger.Error(err, "failed to get domain from Vault")
-		return ctrl.Result{}, err
+		return "", fmt.Errorf("failed to get domain from Vault: %w", err)
 	}
 
-	fqdn := fmt.Sprintf("%s.%s", cr.Spec.Subdomain, domain)
+	if cr.Spec.Subdomain == "" {
+		return domain, nil
+	}
 
-	// 3. Create desired Certificate
-	cert := &certmanagerv1.Certificate{
+	return fmt.Sprintf("%s.%s", cr.Spec.Subdomain, domain), nil
+}
+
+// buildCertificate constructs the desired Certificate resource
+func (r *CertificateRequestReconciler) buildCertificate(cr *networkingv1.CertificateRequest, fqdn string) *certmanagerv1.Certificate {
+	issuerName := cr.Spec.IssuerName
+	if issuerName == "" {
+		issuerName = "ca-issuer"
+	}
+
+	issuerKind := cr.Spec.IssuerKind
+	if issuerKind == "" {
+		issuerKind = "ClusterIssuer"
+	}
+
+	// Extract base domain for organization
+	domain := fqdn
+	if cr.Spec.Subdomain != "" {
+		// Remove subdomain to get base domain
+		domain = fqdn[len(cr.Spec.Subdomain)+1:]
+	}
+
+	return &certmanagerv1.Certificate{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      cr.Name + "-certificate",
 			Namespace: cr.Namespace,
@@ -78,8 +128,8 @@ func (r *CertificateRequestReconciler) Reconcile(ctx context.Context, req ctrl.R
 			SecretName:           cr.Spec.SecretName,
 			RevisionHistoryLimit: int32Ptr(1),
 			IssuerRef: cmmeta.ObjectReference{
-				Name: "ca-issuer",
-				Kind: "ClusterIssuer",
+				Name: issuerName,
+				Kind: issuerKind,
 			},
 			CommonName: fqdn,
 			DNSNames:   []string{fqdn},
@@ -89,42 +139,47 @@ func (r *CertificateRequestReconciler) Reconcile(ctx context.Context, req ctrl.R
 			},
 		},
 	}
+}
 
-	// Set owner reference so the cert is garbage collected when the CR is deleted
-	if err := ctrl.SetControllerReference(&cr, cert, r.Scheme); err != nil {
-		return ctrl.Result{}, err
-	}
+// createOrUpdateCertificate creates or updates the Certificate resource
+func (r *CertificateRequestReconciler) createOrUpdateCertificate(ctx context.Context, cert *certmanagerv1.Certificate) error {
+	logger := log.FromContext(ctx)
 
-	// 4. Create or update Certificate
 	var existing certmanagerv1.Certificate
-	err = r.Get(ctx, client.ObjectKeyFromObject(cert), &existing)
+	err := r.Get(ctx, client.ObjectKeyFromObject(cert), &existing)
+
 	if errors.IsNotFound(err) {
 		if err := r.Create(ctx, cert); err != nil {
-			logger.Error(err, "failed to create Certificate")
-			return ctrl.Result{}, err
+			return fmt.Errorf("failed to create Certificate: %w", err)
 		}
-		logger.Info("Created Certificate", "fqdn", fqdn)
-	} else if err == nil {
-		cert.ResourceVersion = existing.ResourceVersion
-		if err := r.Update(ctx, cert); err != nil {
-			logger.Error(err, "failed to update Certificate")
-			return ctrl.Result{}, err
-		}
-		logger.Info("Updated Certificate", "fqdn", fqdn)
-	} else {
-		return ctrl.Result{}, err
+		logger.Info("Created Certificate", "name", cert.Name, "namespace", cert.Namespace)
+		return nil
 	}
 
-	// 5. Update status
+	if err != nil {
+		return fmt.Errorf("failed to get existing Certificate: %w", err)
+	}
+
+	// Update existing certificate
+	cert.ResourceVersion = existing.ResourceVersion
+	if err := r.Update(ctx, cert); err != nil {
+		return fmt.Errorf("failed to update Certificate: %w", err)
+	}
+
+	logger.Info("Updated Certificate", "name", cert.Name, "namespace", cert.Namespace)
+	return nil
+}
+
+// updateStatus updates the CertificateRequest status
+func (r *CertificateRequestReconciler) updateStatus(ctx context.Context, cr *networkingv1.CertificateRequest, fqdn string) (ctrl.Result, error) {
 	cr.Status.FQDN = fqdn
 	cr.Status.Ready = true
-	if err := r.Status().Update(ctx, &cr); err != nil {
-		logger.Error(err, "failed to update status")
-		return ctrl.Result{}, err
+
+	if err := r.Status().Update(ctx, cr); err != nil {
+		return ctrl.Result{}, fmt.Errorf("failed to update status: %w", err)
 	}
 
 	return ctrl.Result{}, nil
-
 }
 
 // SetupWithManager sets up the controller with the Manager.

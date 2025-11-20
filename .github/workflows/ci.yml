@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Test and Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Download dependencies
+        run: go mod download
+
+      - name: Run linter
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.63.4
+
+      - name: Run unit tests
+        run: make test
+
+      - name: Test results
+        if: success()
+        run: echo "✅ All tests and linting passed!"
+
+  release-dry-run:
+    name: Release Dry Run
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install semantic-release
+        run: |
+          npm install -g semantic-release @semantic-release/exec \
+          @semantic-release/git @semantic-release/changelog \
+          @semantic-release/github @semantic-release/commit-analyzer \
+          @semantic-release/release-notes-generator
+
+      - name: Make version script executable
+        run: chmod +x .github/ci-helpers/update-versions.sh
+
+      - name: Run semantic-release dry run
+        run: npx semantic-release --dry-run
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Dry run results
+        if: success()
+        run: echo "✅ Release dry run completed successfully!"
