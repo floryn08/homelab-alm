@@ -149,12 +149,12 @@ func TestBuildServices(t *testing.T) {
 	}
 
 	svc := services[0]
-	if svc.LoadBalancerSpec.Name != "test-svc" {
-		t.Errorf("Service.Name = %v, want test-svc", svc.LoadBalancerSpec.Name)
+	if svc.Name != "test-svc" {
+		t.Errorf("Service.Name = %v, want test-svc", svc.Name)
 	}
 
 	// Validate Port is intstr type (Traefik API requirement)
-	port := svc.LoadBalancerSpec.Port
+	port := svc.Port
 	if port.Type != intstr.String {
 		t.Errorf("Port.Type = %v, want String", port.Type)
 	}
