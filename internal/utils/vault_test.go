@@ -110,11 +110,11 @@ func TestGetDomainFromVaultErrorHandling(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			_, err := GetDomainFromVault(tt.path, tt.key)
-			
+
 			if tt.wantError && err == nil {
 				t.Error("Expected error for invalid input, got nil")
 			}
-			
+
 			if !tt.wantError && err == nil {
 				t.Error("Expected vault connection error in test environment")
 			}
