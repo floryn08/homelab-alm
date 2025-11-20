@@ -35,7 +35,7 @@ func TestVaultClientCreation(t *testing.T) {
 
 	// Should be able to create client (may fail without VAULT_ADDR, but API should work)
 	client, _ := vault.NewClient(config)
-	
+
 	// If client creation succeeded, verify Logical interface exists
 	if client != nil {
 		logical := client.Logical()

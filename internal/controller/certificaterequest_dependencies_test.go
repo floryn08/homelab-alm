@@ -190,7 +190,7 @@ func TestInt32Ptr(t *testing.T) {
 	ptr := int32Ptr(val)
 
 	if ptr == nil {
-		t.Error("int32Ptr returned nil")
+		t.Fatal("int32Ptr returned nil")
 	}
 	if *ptr != val {
 		t.Errorf("int32Ptr = %v, want %v", *ptr, val)
