@@ -78,7 +78,18 @@ jobs:
 
       - name: Run semantic-release
         id: release
-        run: npx semantic-release
+        run: |
+          npx semantic-release > semantic-release-output.txt 2>&1 || true
+          cat semantic-release-output.txt
+          
+          if grep -q "Published release" semantic-release-output.txt || grep -q "There is no previous release" semantic-release-output.txt; then
+            echo "new_release_published=true" >> $GITHUB_OUTPUT
+            # Extract version from the semantic-release output
+            VERSION=$(grep -oP "Published release \K[0-9]+\.[0-9]+\.[0-9]+(-dev\.[0-9]+)?" semantic-release-output.txt || grep -oP "The next release version is \K[0-9]+\.[0-9]+\.[0-9]+(-dev\.[0-9]+)?" semantic-release-output.txt || cat VERSION)
+            echo "new_release_version=$VERSION" >> $GITHUB_OUTPUT
+          else
+            echo "new_release_published=false" >> $GITHUB_OUTPUT
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
