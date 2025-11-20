@@ -118,7 +118,7 @@ func TestGetDomainFromVaultErrorHandling(t *testing.T) {
 			if !tt.wantError && err == nil {
 				t.Error("Expected vault connection error in test environment")
 			}
-			
+
 			// All calls should return an error (either validation or connection)
 			// This just ensures the function doesn't panic
 			if err == nil {
