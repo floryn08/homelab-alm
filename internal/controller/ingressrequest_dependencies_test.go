@@ -119,11 +119,11 @@ func TestBuildIngressRoute(t *testing.T) {
 			}
 
 			service := routeSpec.Services[0]
-			if service.LoadBalancerSpec.Name != tt.wantServiceName {
-				t.Errorf("Service.Name = %v, want %v", service.LoadBalancerSpec.Name, tt.wantServiceName)
+			if service.Name != tt.wantServiceName {
+				t.Errorf("Service.Name = %v, want %v", service.Name, tt.wantServiceName)
 			}
 
-			portStr := service.LoadBalancerSpec.Port.StrVal
+			portStr := service.Port.StrVal
 			if portStr != tt.wantServicePort {
 				t.Errorf("Service.Port = %v, want %v", portStr, tt.wantServicePort)
 			}
