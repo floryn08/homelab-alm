@@ -12,14 +12,39 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  test:
+    name: Test and Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Download dependencies
+        run: go mod download
+
+      - name: Run linter
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.63.4
+
+      - name: Run unit tests
+        run: make test
+
   create-release:
     name: Create Release
+    needs: test
     runs-on: ubuntu-latest
     permissions:
       contents: write
     outputs:
-      release-created: ${{ steps.release.outputs.release_created }}
-      tag: ${{ steps.release.outputs.tag_name }}
+      new-release-published: ${{ steps.release.outputs.new_release_published }}
+      tag: ${{ steps.release.outputs.new_release_version }}
       is-prerelease: ${{ steps.check-branch.outputs.is-prerelease }}
     steps:
       - name: Checkout code
@@ -30,7 +55,7 @@ jobs:
       - name: Check if prerelease
         id: check-branch
         run: |
-          if [[ "${{ github.ref }}" == refs/heads/dev-* ]]; then
+          if [[ "${{ github.ref }}" =~ refs/heads/dev- ]]; then
             echo "is-prerelease=true" >> $GITHUB_OUTPUT
           else
             echo "is-prerelease=false" >> $GITHUB_OUTPUT
@@ -60,7 +85,7 @@ jobs:
   build-docker:
     name: Build and Push Docker Image
     needs: create-release
-    if: needs.create-release.outputs.release-created == 'true'
+    if: needs.create-release.outputs.new-release-published == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -68,6 +93,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: v${{ needs.create-release.outputs.tag }}
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
@@ -103,7 +130,7 @@ jobs:
   publish-helm:
     name: Publish Helm Chart
     needs: create-release
-    if: needs.create-release.outputs.release-created == 'true'
+    if: needs.create-release.outputs.new-release-published == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -131,8 +158,8 @@ jobs:
 
   cleanup:
     name: Cleanup Old Images
-    needs: build-docker
-    if: needs.create-release.outputs.release-created == 'true'
+    needs: [create-release, build-docker]
+    if: needs.create-release.outputs.new-release-published == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Delete old package versions
