@@ -1,3 +1,13 @@
+## [1.5.1](https://github.com/floryn08/homelab-alm/compare/v1.5.0...v1.5.1) (2025-11-20)
+
+
+### Bug Fixes
+
+* ci fixes ([129986d](https://github.com/floryn08/homelab-alm/commit/129986d7e04df55bc9a2443498ed3307214f55f8))
+* lint fixes ([4014850](https://github.com/floryn08/homelab-alm/commit/4014850f1f15ebdd50ca5f4b9c6a2e738eb4fefe))
+* linting ([30171c7](https://github.com/floryn08/homelab-alm/commit/30171c7834171833f3d27083e38921756a941152))
+* linting ([dd38f4e](https://github.com/floryn08/homelab-alm/commit/dd38f4eaf4e78918e89be2d53a6638eb66a94740))
+
 # [1.5.0](https://github.com/floryn08/homelab-alm/compare/v1.4.0...v1.5.0) (2025-11-20)
 
 
