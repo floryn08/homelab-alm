@@ -1,3 +1,10 @@
+## [1.5.4](https://github.com/floryn08/homelab-alm/compare/v1.5.3...v1.5.4) (2025-11-20)
+
+
+### Bug Fixes
+
+* ci fixes ([65be96b](https://github.com/floryn08/homelab-alm/commit/65be96bcc202dacd33777dceaa666d67875ca907))
+
 ## [1.5.3](https://github.com/floryn08/homelab-alm/compare/v1.5.2...v1.5.3) (2025-11-20)
 
 
