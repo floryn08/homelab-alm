@@ -1,3 +1,10 @@
+## [1.5.3](https://github.com/floryn08/homelab-alm/compare/v1.5.2...v1.5.3) (2025-11-20)
+
+
+### Bug Fixes
+
+* fix chart publish ([c027ffb](https://github.com/floryn08/homelab-alm/commit/c027ffb8453d9a7c6142cf362ea7f38ec2e34564))
+
 ## [1.5.2](https://github.com/floryn08/homelab-alm/compare/v1.5.1...v1.5.2) (2025-11-20)
 
 
