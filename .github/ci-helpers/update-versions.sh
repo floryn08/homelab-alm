@@ -24,7 +24,7 @@ sed -i "s/^version:.*/version: ${version}/" deployment/helm/Chart.yaml
 sed -i "s/^appVersion:.*/appVersion: ${version}/" deployment/helm/Chart.yaml
 
 # Update image tag in values.yaml
-sed -i "s|\(image: .*:\).*|\1v${version}|" deployment/helm/values.yaml
+sed -i "s|\(image: .*:\).*|\1${version}|" deployment/helm/values.yaml
 
 echo "After:"
 grep "image:" deployment/helm/values.yaml || true
