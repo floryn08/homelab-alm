@@ -42,15 +42,34 @@ spec:
             properties:
               domainKey:
                 description: The key used to fetch the domain from Vault at kv/data/domains
+                minLength: 1
+                type: string
+              issuerKind:
+                default: ClusterIssuer
+                description: IssuerKind is the kind of the issuer (Issuer or ClusterIssuer)
+                enum:
+                - Issuer
+                - ClusterIssuer
+                type: string
+              issuerName:
+                default: ca-issuer
+                description: |-
+                  IssuerRef is a reference to the issuer for this certificate.
+                  If not specified, defaults to 'ca-issuer' ClusterIssuer
                 type: string
               secretName:
                 description: The name of the Kubernetes secret to store the generated
                   certificate
+                maxLength: 253
+                minLength: 1
+                pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
                 type: string
               subdomain:
                 description: The subdomain to prepend to the domain (optional)
+                pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
                 type: string
               vaultPath:
+                default: kv/data/domains
                 description: Vault path (e.g. kv/data/cert-info) to read additional
                   metadata (optional)
                 type: string

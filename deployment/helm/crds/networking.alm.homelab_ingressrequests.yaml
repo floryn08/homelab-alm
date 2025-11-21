@@ -40,17 +40,25 @@ spec:
             description: IngressRequestSpec defines the desired state of IngressRequest.
             properties:
               domainKey:
+                description: The key used to fetch the domain from Vault
+                minLength: 1
                 type: string
               entrypoints:
+                description: Traefik entrypoints to use (defaults to ["web"])
                 items:
                   type: string
                 type: array
               middlewares:
+                description: Middlewares to apply to the route
                 items:
                   properties:
                     name:
+                      description: Name of the Traefik middleware
+                      minLength: 1
                       type: string
                     namespace:
+                      description: Namespace where the middleware is located
+                      minLength: 1
                       type: string
                   required:
                   - name
@@ -58,29 +66,36 @@ spec:
                   type: object
                 type: array
               serviceName:
+                description: The name of the Kubernetes service to route traffic to
+                minLength: 1
                 type: string
               servicePort:
+                description: The port of the service (can be port number or name)
                 type: string
               subdomain:
+                description: The subdomain to prepend to the domain
+                pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
                 type: string
               tls:
+                description: TLS configuration for the ingress
                 properties:
                   certResolver:
+                    description: CertResolver for dynamic certificates (e.g. Let's
+                      Encrypt via Traefik)
                     type: string
                   secretName:
+                    description: Reference to TLS secret containing the certificate
                     type: string
                 type: object
               vaultPath:
-                description: |-
-                  INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-                  Important: Run "make" to regenerate code after modifying this file
+                default: kv/data/domains
+                description: Vault path to read domain configuration from
                 type: string
             required:
             - domainKey
             - serviceName
             - servicePort
             - subdomain
-            - vaultPath
             type: object
           status:
             description: IngressRequestStatus defines the observed state of IngressRequest.
