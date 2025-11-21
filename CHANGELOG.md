@@ -1,3 +1,5 @@
+## [1.5.8](https://github.com/floryn08/homelab-alm/compare/v1.5.7...v1.5.8) (2025-11-21)
+
 ## [1.5.7](https://github.com/floryn08/homelab-alm/compare/v1.5.6...v1.5.7) (2025-11-21)
 
 
