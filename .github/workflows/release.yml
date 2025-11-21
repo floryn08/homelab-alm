@@ -164,6 +164,7 @@ jobs:
         uses: helm/chart-releaser-action@v1
         with:
           charts_dir: ./deployment
+          mark_as_latest: false
         env:
           CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
