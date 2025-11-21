@@ -1,3 +1,11 @@
+## [1.5.7](https://github.com/floryn08/homelab-alm/compare/v1.5.6...v1.5.7) (2025-11-21)
+
+
+### Bug Fixes
+
+* build only for amd64 ([6bf53b0](https://github.com/floryn08/homelab-alm/commit/6bf53b064aeb394496b40d8b85702d21f941068f))
+* fixed untagged images ([d82b766](https://github.com/floryn08/homelab-alm/commit/d82b76660ccdb55dbff8260577a4f12decb7f851))
+
 ## [1.5.6](https://github.com/floryn08/homelab-alm/compare/v1.5.5...v1.5.6) (2025-11-21)
 
 
