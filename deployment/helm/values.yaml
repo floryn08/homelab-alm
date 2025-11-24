@@ -1,4 +1,4 @@
-image: ghcr.io/floryn08/homelab-alm:1.5.8
+image: ghcr.io/floryn08/homelab-alm:1.5.9
 namespace: default
 service:
   type: ClusterIP

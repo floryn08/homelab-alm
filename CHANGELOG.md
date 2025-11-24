@@ -1,3 +1,10 @@
+## [1.5.9](https://github.com/floryn08/homelab-alm/compare/v1.5.8...v1.5.9) (2025-11-24)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/traefik/traefik/v3 to v3.6.2 ([#15](https://github.com/floryn08/homelab-alm/issues/15)) ([5733793](https://github.com/floryn08/homelab-alm/commit/573379343e6d536bda73b9ce272338b325229fa9))
+
 ## [1.5.8](https://github.com/floryn08/homelab-alm/compare/v1.5.7...v1.5.8) (2025-11-21)
 
 ## [1.5.7](https://github.com/floryn08/homelab-alm/compare/v1.5.6...v1.5.7) (2025-11-21)
