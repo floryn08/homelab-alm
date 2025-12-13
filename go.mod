@@ -5,7 +5,7 @@ go 1.25.0
 godebug default=go1.25
 
 require (
-	github.com/cert-manager/cert-manager v1.19.1
+	github.com/cert-manager/cert-manager v1.19.2
 	github.com/hashicorp/vault/api v1.22.0
 	github.com/traefik/traefik/v3 v3.6.4
 	k8s.io/apimachinery v0.34.2
