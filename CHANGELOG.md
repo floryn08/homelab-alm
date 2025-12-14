@@ -1,3 +1,11 @@
+## [1.5.11](https://github.com/floryn08/homelab-alm/compare/v1.5.10...v1.5.11) (2025-12-14)
+
+
+### Bug Fixes
+
+* **deps:** update go dependencies to v0.34.3 ([#17](https://github.com/floryn08/homelab-alm/issues/17)) ([f656bd9](https://github.com/floryn08/homelab-alm/commit/f656bd9f3bed58bd5fa1e9be9641b4cb99ced2af))
+* **deps:** update module github.com/cert-manager/cert-manager to v1.19.2 ([#18](https://github.com/floryn08/homelab-alm/issues/18)) ([dc3dde4](https://github.com/floryn08/homelab-alm/commit/dc3dde441e85a618bc427198ae0dd7fa8f685be9))
+
 ## [1.5.10](https://github.com/floryn08/homelab-alm/compare/v1.5.9...v1.5.10) (2025-12-11)
 
 
