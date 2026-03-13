@@ -1,3 +1,11 @@
+## [1.5.16](https://github.com/floryn08/homelab-alm/compare/v1.5.15...v1.5.16) (2026-03-13)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/traefik/traefik/v3 to v3.6.10 ([#27](https://github.com/floryn08/homelab-alm/issues/27)) ([67a3031](https://github.com/floryn08/homelab-alm/commit/67a303106117f3c9fb46bc3464dba0f88b999f82))
+* **deps:** update module sigs.k8s.io/controller-runtime to v0.23.3 ([#26](https://github.com/floryn08/homelab-alm/issues/26)) ([031800e](https://github.com/floryn08/homelab-alm/commit/031800ef49bca790b65a8b5edf9e83990d71b3bb))
+
 ## [1.5.15](https://github.com/floryn08/homelab-alm/compare/v1.5.14...v1.5.15) (2026-03-03)
 
 
