@@ -10,7 +10,7 @@ require (
 	github.com/traefik/traefik/v3 v3.6.10
 	k8s.io/apimachinery v0.35.2
 	k8s.io/client-go v0.35.2
-	sigs.k8s.io/controller-runtime v0.23.1
+	sigs.k8s.io/controller-runtime v0.23.3
 )
 
 require (
