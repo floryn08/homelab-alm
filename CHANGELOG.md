@@ -1,3 +1,10 @@
+## [1.5.19](https://github.com/floryn08/homelab-alm/compare/v1.5.18...v1.5.19) (2026-03-27)
+
+
+### Bug Fixes
+
+* **deps:** update go dependencies to v0.35.3 ([#31](https://github.com/floryn08/homelab-alm/issues/31)) ([8539c8d](https://github.com/floryn08/homelab-alm/commit/8539c8ddf3135b36594cda8d85d5fb27c77474e2))
+
 ## [1.5.18](https://github.com/floryn08/homelab-alm/compare/v1.5.17...v1.5.18) (2026-03-27)
 
 
