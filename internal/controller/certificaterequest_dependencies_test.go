@@ -126,18 +126,18 @@ func TestBuildCertificate(t *testing.T) {
 
 // TestCertManagerObjectReference validates the IssuerRef structure
 func TestCertManagerObjectReference(t *testing.T) {
-	// Test that we can create an ObjectReference with expected fields
-	ref := cmmeta.ObjectReference{
+	// Test that we can create an IssuerReference with expected fields
+	ref := cmmeta.IssuerReference{
 		Name:  "test-issuer",
 		Kind:  "ClusterIssuer",
 		Group: "",
 	}
 
 	if ref.Name != "test-issuer" {
-		t.Error("ObjectReference.Name field changed")
+		t.Error("IssuerReference.Name field changed")
 	}
 	if ref.Kind != "ClusterIssuer" {
-		t.Error("ObjectReference.Kind field changed")
+		t.Error("IssuerReference.Kind field changed")
 	}
 
 	// Test in Certificate context

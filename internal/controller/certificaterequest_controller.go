@@ -127,7 +127,7 @@ func (r *CertificateRequestReconciler) buildCertificate(cr *networkingv1.Certifi
 		Spec: certmanagerv1.CertificateSpec{
 			SecretName:           cr.Spec.SecretName,
 			RevisionHistoryLimit: int32Ptr(1),
-			IssuerRef: cmmeta.ObjectReference{
+			IssuerRef: cmmeta.IssuerReference{
 				Name: issuerName,
 				Kind: issuerKind,
 			},
