@@ -111,6 +111,4 @@ type IngressRequestList struct {
 	Items           []IngressRequest `json:"items"`
 }
 
-func init() {
-	SchemeBuilder.Register(&IngressRequest{}, &IngressRequestList{})
-}
+

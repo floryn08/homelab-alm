@@ -88,6 +88,4 @@ type CertificateRequestList struct {
 	Items           []CertificateRequest `json:"items"`
 }
 
-func init() {
-	SchemeBuilder.Register(&CertificateRequest{}, &CertificateRequestList{})
-}
+
