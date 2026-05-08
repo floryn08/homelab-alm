@@ -88,4 +88,3 @@ type CertificateRequestList struct {
 	Items           []CertificateRequest `json:"items"`
 }
 
-

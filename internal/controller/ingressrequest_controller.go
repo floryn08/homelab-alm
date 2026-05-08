@@ -18,6 +18,11 @@ import (
 	"github.com/floryn08/homelab-alm/internal/utils"
 )
 
+const (
+	defaultEntrypoint = "web"
+	routeKind         = "Rule"
+)
+
 // IngressRequestReconciler reconciles a IngressRequest object
 type IngressRequestReconciler struct {
 	client.Client
@@ -88,7 +93,7 @@ func (r *IngressRequestReconciler) getFQDN(ir *networkingv1.IngressRequest) (str
 func (r *IngressRequestReconciler) buildIngressRoute(ir *networkingv1.IngressRequest, fqdn string) *traefikv1alpha1.IngressRoute {
 	entrypoints := ir.Spec.Entrypoints
 	if len(entrypoints) == 0 {
-		entrypoints = []string{"web"}
+		entrypoints = []string{defaultEntrypoint}
 	}
 
 	route := &traefikv1alpha1.IngressRoute{
@@ -101,7 +106,7 @@ func (r *IngressRequestReconciler) buildIngressRoute(ir *networkingv1.IngressReq
 			Routes: []traefikv1alpha1.Route{
 				{
 					Match:       fmt.Sprintf("Host(`%s`)", fqdn),
-					Kind:        "Rule",
+				Kind:        routeKind,
 					Services:    r.buildServices(ir),
 					Middlewares: r.buildMiddlewares(ir),
 				},

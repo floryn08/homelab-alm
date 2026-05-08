@@ -111,4 +111,3 @@ type IngressRequestList struct {
 	Items           []IngressRequest `json:"items"`
 }
 
-

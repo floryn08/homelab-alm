@@ -32,6 +32,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/log"
 )
 
+const defaultIssuerKind = "ClusterIssuer"
+
 // CertificateRequestReconciler reconciles a CertificateRequest object
 type CertificateRequestReconciler struct {
 	client.Client
@@ -109,7 +111,7 @@ func (r *CertificateRequestReconciler) buildCertificate(cr *networkingv1.Certifi
 
 	issuerKind := cr.Spec.IssuerKind
 	if issuerKind == "" {
-		issuerKind = "ClusterIssuer"
+		issuerKind = defaultIssuerKind
 	}
 
 	// Extract base domain for organization
