@@ -110,4 +110,3 @@ type IngressRequestList struct {
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []IngressRequest `json:"items"`
 }
-

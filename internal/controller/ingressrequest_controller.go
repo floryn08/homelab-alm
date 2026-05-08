@@ -106,7 +106,7 @@ func (r *IngressRequestReconciler) buildIngressRoute(ir *networkingv1.IngressReq
 			Routes: []traefikv1alpha1.Route{
 				{
 					Match:       fmt.Sprintf("Host(`%s`)", fqdn),
-				Kind:        routeKind,
+					Kind:        routeKind,
 					Services:    r.buildServices(ir),
 					Middlewares: r.buildMiddlewares(ir),
 				},
