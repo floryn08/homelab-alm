@@ -110,7 +110,7 @@ func TestBuildIngressRoute(t *testing.T) {
 				t.Errorf("Route.Match = %v, want %v", routeSpec.Match, expectedMatch)
 			}
 
-if routeSpec.Kind != routeKind {
+			if routeSpec.Kind != routeKind {
 				t.Errorf("Route.Kind = %v, want Rule", routeSpec.Kind)
 			}
 
