@@ -50,35 +50,35 @@ func TestBuildCertificate(t *testing.T) {
 			cr: &networkingv1.CertificateRequest{
 				ObjectMeta: metav1.ObjectMeta{
 					Name:      "test-cert",
-					Namespace: "default",
+					Namespace: testNamespace,
 				},
 				Spec: networkingv1.CertificateRequestSpec{
-					SecretName: "test-secret",
-					DomainKey:  "prodDomain",
-					Subdomain:  "app",
+					SecretName: testSecretName,
+					DomainKey:  testDomainKey,
+					Subdomain:  testSubdomain,
 				},
 			},
-			fqdn:     "app.example.com",
+			fqdn:     testFQDN,
 			wantName: "ca-issuer",
-			wantKind: "ClusterIssuer",
+			wantKind: defaultIssuerKind,
 		},
 		{
 			name: "custom issuer",
 			cr: &networkingv1.CertificateRequest{
 				ObjectMeta: metav1.ObjectMeta{
 					Name:      "test-cert",
-					Namespace: "default",
+					Namespace: testNamespace,
 				},
 				Spec: networkingv1.CertificateRequestSpec{
-					SecretName: "test-secret",
-					DomainKey:  "prodDomain",
-					Subdomain:  "app",
-					IssuerName: "letsencrypt",
+					SecretName: testSecretName,
+					DomainKey:  testDomainKey,
+					Subdomain:  testSubdomain,
+					IssuerName: testLetsEncrypt,
 					IssuerKind: "Issuer",
 				},
 			},
-			fqdn:     "app.example.com",
-			wantName: "letsencrypt",
+			fqdn:     testFQDN,
+			wantName: testLetsEncrypt,
 			wantKind: "Issuer",
 		},
 	}
@@ -128,15 +128,15 @@ func TestBuildCertificate(t *testing.T) {
 func TestCertManagerObjectReference(t *testing.T) {
 	// Test that we can create an IssuerReference with expected fields
 	ref := cmmeta.IssuerReference{
-		Name:  "test-issuer",
-		Kind:  "ClusterIssuer",
+		Name:  testIssuerName,
+		Kind:  defaultIssuerKind,
 		Group: "",
 	}
 
-	if ref.Name != "test-issuer" {
+	if ref.Name != testIssuerName {
 		t.Error("IssuerReference.Name field changed")
 	}
-	if ref.Kind != "ClusterIssuer" {
+	if ref.Kind != defaultIssuerKind {
 		t.Error("IssuerReference.Kind field changed")
 	}
 
@@ -147,7 +147,7 @@ func TestCertManagerObjectReference(t *testing.T) {
 		},
 	}
 
-	if cert.Spec.IssuerRef.Name != "test-issuer" {
+	if cert.Spec.IssuerRef.Name != testIssuerName {
 		t.Error("Certificate.Spec.IssuerRef.Name not accessible - API may have changed")
 	}
 }

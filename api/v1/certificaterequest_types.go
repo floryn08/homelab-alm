@@ -87,7 +87,3 @@ type CertificateRequestList struct {
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []CertificateRequest `json:"items"`
 }
-
-func init() {
-	SchemeBuilder.Register(&CertificateRequest{}, &CertificateRequestList{})
-}

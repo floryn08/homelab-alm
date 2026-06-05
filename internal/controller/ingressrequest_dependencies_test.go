@@ -51,38 +51,38 @@ func TestBuildIngressRoute(t *testing.T) {
 			ir: &networkingv1.IngressRequest{
 				ObjectMeta: metav1.ObjectMeta{
 					Name:      "test-ingress",
-					Namespace: "default",
+					Namespace: testNamespace,
 				},
 				Spec: networkingv1.IngressRequestSpec{
-					Subdomain:   "app",
-					ServiceName: "app-service",
-					ServicePort: "http",
-					DomainKey:   "prodDomain",
+					Subdomain:   testSubdomain,
+					ServiceName: testServiceName,
+					ServicePort: testServicePort,
+					DomainKey:   testDomainKey,
 				},
 			},
-			fqdn:            "app.example.com",
-			wantEntrypoints: []string{"web"},
-			wantServiceName: "app-service",
-			wantServicePort: "http",
+			fqdn:            testFQDN,
+			wantEntrypoints: []string{defaultEntrypoint},
+			wantServiceName: testServiceName,
+			wantServicePort: testServicePort,
 		},
 		{
 			name: "custom entrypoints",
 			ir: &networkingv1.IngressRequest{
 				ObjectMeta: metav1.ObjectMeta{
 					Name:      "test-ingress",
-					Namespace: "default",
+					Namespace: testNamespace,
 				},
 				Spec: networkingv1.IngressRequestSpec{
-					Subdomain:   "app",
-					ServiceName: "app-service",
+					Subdomain:   testSubdomain,
+					ServiceName: testServiceName,
 					ServicePort: "8080",
-					DomainKey:   "prodDomain",
+					DomainKey:   testDomainKey,
 					Entrypoints: []string{"websecure"},
 				},
 			},
-			fqdn:            "app.example.com",
+			fqdn:            testFQDN,
 			wantEntrypoints: []string{"websecure"},
-			wantServiceName: "app-service",
+			wantServiceName: testServiceName,
 			wantServicePort: "8080",
 		},
 	}
@@ -110,7 +110,7 @@ func TestBuildIngressRoute(t *testing.T) {
 				t.Errorf("Route.Match = %v, want %v", routeSpec.Match, expectedMatch)
 			}
 
-			if routeSpec.Kind != "Rule" {
+			if routeSpec.Kind != routeKind {
 				t.Errorf("Route.Kind = %v, want Rule", routeSpec.Kind)
 			}
 
@@ -137,8 +137,8 @@ func TestBuildServices(t *testing.T) {
 
 	ir := &networkingv1.IngressRequest{
 		Spec: networkingv1.IngressRequestSpec{
-			ServiceName: "test-svc",
-			ServicePort: "http",
+			ServiceName: testSvcName,
+			ServicePort: testServicePort,
 		},
 	}
 
@@ -149,7 +149,7 @@ func TestBuildServices(t *testing.T) {
 	}
 
 	svc := services[0]
-	if svc.Name != "test-svc" {
+	if svc.Name != testSvcName {
 		t.Errorf("Service.Name = %v, want test-svc", svc.Name)
 	}
 
@@ -158,7 +158,7 @@ func TestBuildServices(t *testing.T) {
 	if port.Type != intstr.String {
 		t.Errorf("Port.Type = %v, want String", port.Type)
 	}
-	if port.StrVal != "http" {
+	if port.StrVal != testServicePort {
 		t.Errorf("Port.StrVal = %v, want http", port.StrVal)
 	}
 }
@@ -184,7 +184,7 @@ func TestBuildMiddlewares(t *testing.T) {
 			ir: &networkingv1.IngressRequest{
 				Spec: networkingv1.IngressRequestSpec{
 					Middlewares: []networkingv1.MiddlewareRef{
-						{Name: "auth", Namespace: "default"},
+						{Name: "auth", Namespace: testNamespace},
 						{Name: "rate-limit", Namespace: "middleware-ns"},
 					},
 				},
@@ -228,27 +228,27 @@ func TestBuildTLSConfig(t *testing.T) {
 		{
 			name: "with secret",
 			tlsSpec: &networkingv1.IngressTLSConfig{
-				SecretName: "my-tls-secret",
+				SecretName: testTLSSecretName,
 			},
-			wantSecretName:   "my-tls-secret",
+			wantSecretName:   testTLSSecretName,
 			wantCertResolver: "",
 		},
 		{
 			name: "with cert resolver",
 			tlsSpec: &networkingv1.IngressTLSConfig{
-				CertResolver: "letsencrypt",
+				CertResolver: testLetsEncrypt,
 			},
 			wantSecretName:   "",
-			wantCertResolver: "letsencrypt",
+			wantCertResolver: testLetsEncrypt,
 		},
 		{
 			name: "with both",
 			tlsSpec: &networkingv1.IngressTLSConfig{
-				SecretName:   "my-tls-secret",
-				CertResolver: "letsencrypt",
+				SecretName:   testTLSSecretName,
+				CertResolver: testLetsEncrypt,
 			},
-			wantSecretName:   "my-tls-secret",
-			wantCertResolver: "letsencrypt",
+			wantSecretName:   testTLSSecretName,
+			wantCertResolver: testLetsEncrypt,
 		},
 	}
 
@@ -277,16 +277,16 @@ func TestTraefikIngressRouteStructure(t *testing.T) {
 	// Test that we can create IngressRoute with expected structure
 	route := &traefikv1alpha1.IngressRoute{
 		Spec: traefikv1alpha1.IngressRouteSpec{
-			EntryPoints: []string{"web"},
+			EntryPoints: []string{defaultEntrypoint},
 			Routes: []traefikv1alpha1.Route{
 				{
 					Match: "Host(`example.com`)",
-					Kind:  "Rule",
+					Kind:  routeKind,
 					Services: []traefikv1alpha1.Service{
 						{
 							LoadBalancerSpec: traefikv1alpha1.LoadBalancerSpec{
-								Name: "test-svc",
-								Port: intstr.FromString("http"),
+								Name: testSvcName,
+								Port: intstr.FromString(testServicePort),
 							},
 						},
 					},
@@ -316,11 +316,11 @@ func TestTraefikIngressRouteStructure(t *testing.T) {
 // TestTraefikTLSStructure validates Traefik TLS configuration
 func TestTraefikTLSStructure(t *testing.T) {
 	tls := &traefikv1alpha1.TLS{
-		SecretName:   "test-secret",
-		CertResolver: "letsencrypt",
+		SecretName:   testSecretName,
+		CertResolver: testLetsEncrypt,
 		Options: &traefikv1alpha1.TLSOptionRef{
-			Name:      "default",
-			Namespace: "default",
+			Name:      testNamespace,
+			Namespace: testNamespace,
 		},
 	}
 
