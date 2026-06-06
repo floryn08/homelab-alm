@@ -7,6 +7,7 @@ WORKDIR /workspace
 # Copy the Go Modules manifests
 COPY go.mod go.mod
 COPY go.sum go.sum
+COPY third_party/traefik-dynamic-ext/go.mod third_party/traefik-dynamic-ext/go.mod
 # cache deps before building and copying source so that we don't need to re-download as much
 # and so that source changes don't invalidate our downloaded layer
 RUN go mod download
@@ -15,6 +16,7 @@ RUN go mod download
 COPY cmd/main.go cmd/main.go
 COPY api/ api/
 COPY internal/ internal/
+COPY third_party/ third_party/
 
 # Build
 # the GOARCH has not a default value to allow the binary be built according to the host where the command
