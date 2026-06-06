@@ -1,3 +1,10 @@
+## [1.5.25](https://github.com/floryn08/homelab-alm/compare/v1.5.24...v1.5.25) (2026-06-06)
+
+
+### Bug Fixes
+
+* add missing metav1.AddToGroupVersion call in addKnownTypes function ([3db5cb2](https://github.com/floryn08/homelab-alm/commit/3db5cb24561e229c8dd2fef1418acb7290e9d760))
+
 ## [1.5.24](https://github.com/floryn08/homelab-alm/compare/v1.5.23...v1.5.24) (2026-06-06)
 
 ## [1.5.23](https://github.com/floryn08/homelab-alm/compare/v1.5.22...v1.5.23) (2026-06-06)
