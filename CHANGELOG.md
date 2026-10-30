@@ -1,3 +1,10 @@
+## [1.5.33](https://github.com/floryn08/homelab-alm/compare/v1.5.32...v1.5.33) (2026-10-30)
+
+
+### Bug Fixes
+
+* **deps:** update critical dependencies ([#47](https://github.com/floryn08/homelab-alm/issues/47)) ([13d2bc8](https://github.com/floryn08/homelab-alm/commit/13d2bc88da968db4e2643bb4185782b98f1c286f))
+
 ## [1.5.32](https://github.com/floryn08/homelab-alm/compare/v1.5.31...v1.5.32) (2026-09-07)
 
 
